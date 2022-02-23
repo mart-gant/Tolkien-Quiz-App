@@ -1,4 +1,4 @@
-package com.example.data
+package com.martgant.tolkienquizapp
 
 import org.junit.Test
 

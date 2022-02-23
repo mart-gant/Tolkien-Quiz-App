@@ -1,4 +1,4 @@
-package com.example.tolkienquizapp
+package com.martgant.domain
 
 import org.junit.Test
 

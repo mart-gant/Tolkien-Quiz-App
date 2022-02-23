@@ -1,4 +1,4 @@
-package com.example.data
+package com.martgant.data
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

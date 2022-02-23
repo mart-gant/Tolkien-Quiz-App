@@ -1,4 +1,4 @@
-package com.example.domain
+package com.martgant.domain
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
