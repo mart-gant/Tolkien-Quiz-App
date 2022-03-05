@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tolkienquizapp">
+    package="com.martgant.tolkienquizapp">
 
     <application
         android:allowBackup="true"
