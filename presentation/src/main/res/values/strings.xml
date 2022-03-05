@@ -24,7 +24,7 @@
     <string name="question_3_answer_correct" translatable="false">@string/generic_true</string>
     <string name="question_3_answer_incorrect_1" translatable="false">@string/generic_false</string>
     <string name="question_4">Was Radagast cousin of Gandalf?</string>
-    <string name="question_4_answer_correct" translatable="false">@string/generic_true</string>
-    <string name="question_4_answer_incorrect_1" translatable="false">@string/generic_false</string>
+    <string name="question_4_answer_correct" translatable="false">@string/generic_false</string>
+    <string name="question_4_answer_incorrect_1" translatable="false">@string/generic_true</string>
 </resources>
 

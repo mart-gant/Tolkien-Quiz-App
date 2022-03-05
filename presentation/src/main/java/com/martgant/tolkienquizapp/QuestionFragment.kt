@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.martgant.tolkienquizapp.databinding.FragmentQuestionBinding
+import kotlin.random.Random
 
 class QuestionFragment : Fragment() {
 
@@ -31,11 +32,30 @@ class QuestionFragment : Fragment() {
         binding.answer2.text = context?.getString(answer2Res)
     }
 
-    private fun getQuestionProps() = QuestionProps(
-        questionRes = R.string.question_1,
-        answer1Res = R.string.question_1_answer_correct,
-        answer2Res = R.string.question_1_answer_incorrect_1
-    )
+    private fun getQuestionProps(): QuestionProps {
+        val questionNumber = Random.nextInt(1, 5)
+        val questionFormat = "question_%d"
+        val answerCorrectFormat = "question_%d_answer_correct"
+        val answerIncorrectFormat = "question_%d_answer_incorrect_%d"
+
+        return QuestionProps(
+            questionRes = resources.getIdentifier(
+                questionFormat.format(questionNumber),
+                "string",
+                activity?.packageName
+            ),
+            answer1Res = resources.getIdentifier(
+                answerCorrectFormat.format(questionNumber),
+                "string",
+                activity?.packageName
+            ),
+            answer2Res = resources.getIdentifier(
+                answerIncorrectFormat.format(questionNumber, 1),
+                "string",
+                activity?.packageName
+            )
+        )
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
