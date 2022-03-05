@@ -24,6 +24,9 @@ class QuestionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.questionDescription.text = context?.getString(R.string.question_1)
+        binding.answer1.text = context?.getString(R.string.question_1_answer_correct)
+        binding.answer2.text = context?.getString(R.string.question_1_answer_incorrect_1)
     }
 
     override fun onDestroyView() {
