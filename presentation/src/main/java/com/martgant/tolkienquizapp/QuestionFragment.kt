@@ -26,6 +26,8 @@ class QuestionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // This is called destructuring
+        // https://kotlinlang.org/docs/destructuring-declarations.html
         val (questionRes, answer1Res, answer2Res) = getQuestionProps()
         binding.questionDescription.text = context?.getString(questionRes)
         binding.answer1.text = context?.getString(answer1Res)
@@ -34,11 +36,16 @@ class QuestionFragment : Fragment() {
 
     private fun getQuestionProps(): QuestionProps {
         val questionNumber = Random.nextInt(1, 5)
+        // This is a string that will be used to get string from resources. %d is "placeholder"
+        // which will be replaced with number later
         val questionFormat = "question_%d"
         val answerCorrectFormat = "question_%d_answer_correct"
         val answerIncorrectFormat = "question_%d_answer_incorrect_%d"
 
         return QuestionProps(
+            // to get string based on string you need to use `resources.getIdentifier`
+            // the parameters are: 1) name of the string you want, 2) type of resource (in this case "string")
+            // 3) package name in which the string is placed - for now it's always the same
             questionRes = resources.getIdentifier(
                 questionFormat.format(questionNumber),
                 "string",
