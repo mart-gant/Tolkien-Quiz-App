@@ -25,10 +25,10 @@ class QuestionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val props = getQuestionProps()
-        binding.questionDescription.text = context?.getString(props.questionRes)
-        binding.answer1.text = context?.getString(props.answer1Res)
-        binding.answer2.text = context?.getString(props.answer2Res)
+        val (questionRes, answer1Res, answer2Res) = getQuestionProps()
+        binding.questionDescription.text = context?.getString(questionRes)
+        binding.answer1.text = context?.getString(answer1Res)
+        binding.answer2.text = context?.getString(answer2Res)
     }
 
     private fun getQuestionProps() = QuestionProps(
