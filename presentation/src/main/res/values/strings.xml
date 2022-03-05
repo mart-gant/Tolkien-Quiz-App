@@ -9,18 +9,23 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="tolkien_quiz_app">tolkien_quiz_app</string>
+    <string name="question_text">question_text</string>
 
-    <string-array name="questions_array">
-        <item>Who was Gandalf?</item>
-        <item>What is capital city of Gondor</item>
-        <item>Where Aragorn grew up?</item>
-        <item>Who had Three Rings?</item>
-        <item>Who was Ringwraits?</item>
-        <item>What is names of Elendil sons?</item>
-        <item>Who created orcs?</item>
-        <item>When Wizards arrived to Middleearth?</item>
-        <item>Who created dwarfs?</item>
-        <item>When The Rings was forged?</item>
-    </string-array>
+    <string name="generic_true>True</string>
+    <string name="generic_false">False</string>
+
+    <string name="question_1">Is Gandalf was Istari?</string>
+    <string name="question_1_answer_correct" translatable="false">@string/generic_true</string>
+    <string name="question_1_answer_incorrect_1" translatable="false">@string/generic_false</string>
+    <string name="question_2">Is Nazgul was men before?</string>
+    <string name="question_2_answer_correct" translatable="false">@string/generic_true</string>
+    <string name="question_2_answer_incorrect_1" translatable="false">@string/generic_false</string>
+    <string name="question_3">Is Aragorn was heir of Isildur?</string>
+    <string name="question_3_answer_correct" translatable="false">@string/generic_true</string>
+    <string name="question_3_answer_incorrect_1" translatable="false">@string/generic_false</string>
+    <string name="question_4">Is Radagast was cousin of Gandalf?</string>
+    <string name="question_4_answer_correct" translatable="false">@string/generic_true</string>
+    <string name="question_4_answer_incorrect_1" translatable="false">@string/generic_false</string>
 </resources>
 
