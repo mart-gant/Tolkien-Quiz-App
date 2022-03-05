@@ -25,15 +25,17 @@ class QuestionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val props = QuestionProps(
-            questionRes = R.string.question_1,
-            answer1Res = R.string.question_1_answer_correct,
-            answer2Res = R.string.question_1_answer_incorrect_1
-        )
+        val props = getQuestionProps()
         binding.questionDescription.text = context?.getString(props.questionRes)
         binding.answer1.text = context?.getString(props.answer1Res)
         binding.answer2.text = context?.getString(props.answer2Res)
     }
+
+    private fun getQuestionProps() = QuestionProps(
+        questionRes = R.string.question_1,
+        answer1Res = R.string.question_1_answer_correct,
+        answer2Res = R.string.question_1_answer_incorrect_1
+    )
 
     override fun onDestroyView() {
         super.onDestroyView()
