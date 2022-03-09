@@ -48,20 +48,17 @@ class QuestionFragment : BaseFragment() {
     private fun bindButton(button: Button, answer: QuestionProps.Answer) {
         button.text = context?.getString(answer.answerRes)
         button.setOnClickListener {
-            when (answer.isCorrect) {
-                true -> onCorrectAnswerClicked()
-                false -> onIncorrectAnswerClicked()
-            }
+            onAnswerSubmitted(answer.isCorrect)
         }
     }
 
-    private fun onCorrectAnswerClicked() {
-        showToast(R.string.correct_answer)
-        refresh()
-    }
-
-    private fun onIncorrectAnswerClicked() {
-        showToast(R.string.incorrect_answer)
+    // Now let's make the on answer callback more general
+    private fun onAnswerSubmitted(isCorrect: Boolean) {
+        val toastTextRes = when {
+            isCorrect -> R.string.correct_answer
+            else -> R.string.incorrect_answer
+        }
+        showToast(toastTextRes)
         refresh()
     }
 
