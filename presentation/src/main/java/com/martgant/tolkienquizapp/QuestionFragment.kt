@@ -43,19 +43,26 @@ class QuestionFragment : Fragment() {
         val questionNumber = Random.nextInt(1, 5)
 
         val correctAnswer = QuestionProps.Answer(
-            answerRes = resources.getIdentifier(ANSWER_CORRECT_FORMAT.format(questionNumber), "string", activity?.packageName),
+            answerRes = getStringByName(ANSWER_CORRECT_FORMAT.format(questionNumber)),
             isCorrect = true
         )
 
         val incorrectAnswer = QuestionProps.Answer(
-            answerRes = resources.getIdentifier(ANSWER_INCORRECT_FORMAT.format(questionNumber, 1), "string", activity?.packageName),
+            answerRes = getStringByName(ANSWER_INCORRECT_FORMAT.format(questionNumber, 1)),
             isCorrect = false
         )
 
-        val questionRes = resources.getIdentifier(QUESTION_FORMAT.format(questionNumber), "string", activity?.packageName)
+        val questionRes = getStringByName(QUESTION_FORMAT.format(questionNumber))
         val answers = listOf(correctAnswer, incorrectAnswer).shuffled()
 
         return QuestionProps(questionRes, answers)
+    }
+
+    // In 3 different places we were using the same "approach" to get string. You should extract common part to separate method.
+    // For now it will be in `QuestionFragment` but later I will move it somewhere else
+    @StringRes
+    private fun getStringByName(stringName: String): Int {
+        return resources.getIdentifier(stringName, "string", activity?.packageName)
     }
 
     override fun onDestroyView() {
