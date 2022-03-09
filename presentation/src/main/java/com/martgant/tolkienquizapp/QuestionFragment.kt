@@ -34,14 +34,20 @@ class QuestionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val (questionRes, answers) = getQuestionProps()
-        binding.questionDescription.text = context?.getString(questionRes)
-        bindButton(binding.answer1, answers[0])
-        bindButton(binding.answer2, answers[1])
+        refresh()
     }
 
-    // Since adding text and on click listener to button would have to happen for each button - let's extract it to separate method.
-    // It's not yet in it's final form
+    // Let's extract all "question showing" logic to refresh() method we will call it after user gives an answer
+    private fun refresh() {
+        val (questionRes, answers) = getQuestionProps()
+        binding.questionDescription.text = context?.getString(questionRes)
+        val buttons = listOf(binding.answer1, binding.answer2)
+        // Take a look at how `forEachIndexed` works below. Each element of the list is assosiated with index in the list and then you can use both
+        buttons.forEachIndexed { index, button ->
+            bindButton(button, answers[index])
+        }
+    }
+
     private fun bindButton(button: Button, answer: QuestionProps.Answer) {
         button.text = context?.getString(answer.answerRes)
         button.setOnClickListener {
@@ -54,10 +60,12 @@ class QuestionFragment : Fragment() {
 
     private fun onCorrectAnswerClicked() {
         Toast.makeText(requireContext(), R.string.correct_answer, Toast.LENGTH_LONG).show()
+        refresh()
     }
 
     private fun onIncorrectAnswerClicked() {
         Toast.makeText(requireContext(), R.string.incorrect_answer, Toast.LENGTH_LONG).show()
+        refresh()
     }
 
     private fun getQuestionProps(): QuestionProps {
