@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
+import com.martgant.tolkienquizapp.base.BaseFragment
 import com.martgant.tolkienquizapp.databinding.FragmentQuestionBinding
 import kotlin.random.Random
 
-class QuestionFragment : Fragment() {
+class QuestionFragment : BaseFragment() {
 
     private var _binding: FragmentQuestionBinding? = null
     private val binding get() = _binding!!
@@ -37,12 +36,10 @@ class QuestionFragment : Fragment() {
         refresh()
     }
 
-    // Let's extract all "question showing" logic to refresh() method we will call it after user gives an answer
     private fun refresh() {
         val (questionRes, answers) = getQuestionProps()
         binding.questionDescription.text = context?.getString(questionRes)
         val buttons = listOf(binding.answer1, binding.answer2)
-        // Take a look at how `forEachIndexed` works below. Each element of the list is assosiated with index in the list and then you can use both
         buttons.forEachIndexed { index, button ->
             bindButton(button, answers[index])
         }
@@ -59,12 +56,12 @@ class QuestionFragment : Fragment() {
     }
 
     private fun onCorrectAnswerClicked() {
-        Toast.makeText(requireContext(), R.string.correct_answer, Toast.LENGTH_LONG).show()
+        showToast(R.string.correct_answer)
         refresh()
     }
 
     private fun onIncorrectAnswerClicked() {
-        Toast.makeText(requireContext(), R.string.incorrect_answer, Toast.LENGTH_LONG).show()
+        showToast(R.string.incorrect_answer)
         refresh()
     }
 
@@ -85,11 +82,6 @@ class QuestionFragment : Fragment() {
         val answers = listOf(correctAnswer, incorrectAnswer).shuffled()
 
         return QuestionProps(questionRes, answers)
-    }
-
-    @StringRes
-    private fun getStringByName(stringName: String): Int {
-        return resources.getIdentifier(stringName, "string", activity?.packageName)
     }
 
     override fun onDestroyView() {
