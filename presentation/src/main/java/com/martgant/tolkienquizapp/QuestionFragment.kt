@@ -32,32 +32,30 @@ class QuestionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val (questionRes, answer1Res, answer2Res) = getQuestionProps()
+        val (questionRes, answers) = getQuestionProps()
         binding.questionDescription.text = context?.getString(questionRes)
-        binding.answer1.text = context?.getString(answer1Res)
-        binding.answer2.text = context?.getString(answer2Res)
+        // Since now you receive list of answers to access each one you need to do answers[X] where X is an index. Of course starting from 0.
+        binding.answer1.text = context?.getString(answers[0].answerRes)
+        binding.answer2.text = context?.getString(answers[1].answerRes)
     }
 
     private fun getQuestionProps(): QuestionProps {
         val questionNumber = Random.nextInt(1, 5)
 
-        return QuestionProps(
-            questionRes = resources.getIdentifier(
-                QUESTION_FORMAT.format(questionNumber),
-                "string",
-                activity?.packageName
-            ),
-            answer1Res = resources.getIdentifier(
-                ANSWER_CORRECT_FORMAT.format(questionNumber),
-                "string",
-                activity?.packageName
-            ),
-            answer2Res = resources.getIdentifier(
-                ANSWER_INCORRECT_FORMAT.format(questionNumber, 1),
-                "string",
-                activity?.packageName
-            )
+        val correctAnswer = QuestionProps.Answer(
+            answerRes = resources.getIdentifier(ANSWER_CORRECT_FORMAT.format(questionNumber), "string", activity?.packageName),
+            isCorrect = true
         )
+
+        val incorrectAnswer = QuestionProps.Answer(
+            answerRes = resources.getIdentifier(ANSWER_INCORRECT_FORMAT.format(questionNumber, 1), "string", activity?.packageName),
+            isCorrect = false
+        )
+
+        val questionRes = resources.getIdentifier(QUESTION_FORMAT.format(questionNumber), "string", activity?.packageName)
+        val answers = listOf(correctAnswer, incorrectAnswer).shuffled()
+
+        return QuestionProps(questionRes, answers)
     }
 
     override fun onDestroyView() {
@@ -65,10 +63,10 @@ class QuestionFragment : Fragment() {
         _binding = null
     }
 
-    private data class QuestionProps(
-        @StringRes val questionRes: Int,
-        @StringRes val answer1Res: Int,
-        @StringRes val answer2Res: Int
-    )
+    // `answers` is now a list - so each question can have potentially a lot of possible answers. Of course now it's always 2 but it will change later
+    private data class QuestionProps(@StringRes val questionRes: Int, val answers: List<Answer>) {
+        // This is the way to represent the answer - you need to know the text to display and if the answer is correct or not
+        data class Answer(@StringRes val answerRes: Int, val isCorrect: Boolean)
+    }
 
 }
