@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.martgant.tolkienquizapp.databinding.FragmentQuestionBinding
@@ -34,9 +36,28 @@ class QuestionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val (questionRes, answers) = getQuestionProps()
         binding.questionDescription.text = context?.getString(questionRes)
-        // Since now you receive list of answers to access each one you need to do answers[X] where X is an index. Of course starting from 0.
-        binding.answer1.text = context?.getString(answers[0].answerRes)
-        binding.answer2.text = context?.getString(answers[1].answerRes)
+        bindButton(binding.answer1, answers[0])
+        bindButton(binding.answer2, answers[1])
+    }
+
+    // Since adding text and on click listener to button would have to happen for each button - let's extract it to separate method.
+    // It's not yet in it's final form
+    private fun bindButton(button: Button, answer: QuestionProps.Answer) {
+        button.text = context?.getString(answer.answerRes)
+        button.setOnClickListener {
+            when (answer.isCorrect) {
+                true -> onCorrectAnswerClicked()
+                false -> onIncorrectAnswerClicked()
+            }
+        }
+    }
+
+    private fun onCorrectAnswerClicked() {
+        Toast.makeText(requireContext(), R.string.correct_answer, Toast.LENGTH_LONG).show()
+    }
+
+    private fun onIncorrectAnswerClicked() {
+        Toast.makeText(requireContext(), R.string.incorrect_answer, Toast.LENGTH_LONG).show()
     }
 
     private fun getQuestionProps(): QuestionProps {
@@ -58,8 +79,6 @@ class QuestionFragment : Fragment() {
         return QuestionProps(questionRes, answers)
     }
 
-    // In 3 different places we were using the same "approach" to get string. You should extract common part to separate method.
-    // For now it will be in `QuestionFragment` but later I will move it somewhere else
     @StringRes
     private fun getStringByName(stringName: String): Int {
         return resources.getIdentifier(stringName, "string", activity?.packageName)
@@ -70,9 +89,7 @@ class QuestionFragment : Fragment() {
         _binding = null
     }
 
-    // `answers` is now a list - so each question can have potentially a lot of possible answers. Of course now it's always 2 but it will change later
     private data class QuestionProps(@StringRes val questionRes: Int, val answers: List<Answer>) {
-        // This is the way to represent the answer - you need to know the text to display and if the answer is correct or not
         data class Answer(@StringRes val answerRes: Int, val isCorrect: Boolean)
     }
 
