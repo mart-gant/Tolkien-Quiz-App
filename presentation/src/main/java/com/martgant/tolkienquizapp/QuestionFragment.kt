@@ -41,22 +41,19 @@ class QuestionFragment : Fragment() {
     private fun getQuestionProps(): QuestionProps {
         val questionNumber = Random.nextInt(1, 5)
 
-        val questionFormat = QUESTION_FORMAT
-        val answerCorrectFormat = ANSWER_CORRECT_FORMAT
-        val answerIncorrectFormat = ANSWER_INCORRECT_FORMAT
         return QuestionProps(
             questionRes = resources.getIdentifier(
-                questionFormat.format(questionNumber),
+                QUESTION_FORMAT.format(questionNumber),
                 "string",
                 activity?.packageName
             ),
             answer1Res = resources.getIdentifier(
-                answerCorrectFormat.format(questionNumber),
+                ANSWER_CORRECT_FORMAT.format(questionNumber),
                 "string",
                 activity?.packageName
             ),
             answer2Res = resources.getIdentifier(
-                answerIncorrectFormat.format(questionNumber, 1),
+                ANSWER_INCORRECT_FORMAT.format(questionNumber, 1),
                 "string",
                 activity?.packageName
             )
