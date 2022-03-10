@@ -13,6 +13,12 @@ class QuestionFragment : Fragment() {
 
     private var _binding: FragmentQuestionBinding? = null
     private val binding get() = _binding!!
+    
+    private companion object {
+        const val QUESTION_FORMAT = "question_%d"
+        const val ANSWER_CORRECT_FORMAT = "question_%d_answer_correct"
+        const val ANSWER_INCORRECT_FORMAT = "question_%d_answer_incorrect_%d"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,9 +41,9 @@ class QuestionFragment : Fragment() {
     private fun getQuestionProps(): QuestionProps {
         val questionNumber = Random.nextInt(1, 5)
 
-        val questionFormat = null
-        val answerCorrectFormat = null
-        val answerIncorrectFormat = null
+        val questionFormat = QUESTION_FORMAT
+        val answerCorrectFormat = ANSWER_CORRECT_FORMAT
+        val answerIncorrectFormat = ANSWER_INCORRECT_FORMAT
         return QuestionProps(
             questionRes = resources.getIdentifier(
                 questionFormat.format(questionNumber),
@@ -68,9 +74,4 @@ class QuestionFragment : Fragment() {
         @StringRes val answer2Res: Int
     )
 
-    companion object {
-        private const val QUESTION_FORMAT = "question_%d"
-        private const val ANSWER_CORRECT_FORMAT = "question_%d_answer_correct"
-        private const val ANSWER_INCORRECT_FORMAT = "question_%d_answer_incorrect_%d"
-    }
 }
