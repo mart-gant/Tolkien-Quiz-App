@@ -2,8 +2,7 @@
     <string name="app_name">Tolkien Quiz App</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="question_fragment_label">Question</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
@@ -15,17 +14,19 @@
     <string name="generic_true">True</string>
     <string name="generic_false">False</string>
 
-    <string name="question_1">Is Gandalf was Istari?</string>
+    <string name="question_1">Was Gandalf Istari?</string>
     <string name="question_1_answer_correct" translatable="false">@string/generic_true</string>
     <string name="question_1_answer_incorrect_1" translatable="false">@string/generic_false</string>
-    <string name="question_2">Is Nazgul was men before?</string>
+    <string name="question_2">Was Nazgul men before?</string>
     <string name="question_2_answer_correct" translatable="false">@string/generic_true</string>
     <string name="question_2_answer_incorrect_1" translatable="false">@string/generic_false</string>
-    <string name="question_3">Is Aragorn was heir of Isildur?</string>
+    <string name="question_3">Was Aragorn heir of Isildur?</string>
     <string name="question_3_answer_correct" translatable="false">@string/generic_true</string>
     <string name="question_3_answer_incorrect_1" translatable="false">@string/generic_false</string>
-    <string name="question_4">Is Radagast was cousin of Gandalf?</string>
-    <string name="question_4_answer_correct" translatable="false">@string/generic_true</string>
-    <string name="question_4_answer_incorrect_1" translatable="false">@string/generic_false</string>
+    <string name="question_4">Was Radagast cousin of Gandalf?</string>
+    <string name="question_4_answer_correct" translatable="false">@string/generic_false</string>
+    <string name="question_4_answer_incorrect_1" translatable="false">@string/generic_true</string>
+</resources>
+rect_1" translatable="false">@string/generic_false</string>
 </resources>
 
