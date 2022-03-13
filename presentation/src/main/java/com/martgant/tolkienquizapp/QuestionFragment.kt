@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
+import com.martgant.tolkienquizapp.base.BaseFragment
 import com.martgant.tolkienquizapp.databinding.FragmentQuestionBinding
 import kotlin.random.Random
 
-class QuestionFragment : Fragment() {
+class QuestionFragment : BaseFragment() {
 
     private var _binding: FragmentQuestionBinding? = null
     private val binding get() = _binding!!
@@ -32,35 +33,52 @@ class QuestionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val (questionRes, answer1Res, answer2Res) = getQuestionProps()
+        refresh()
+    }
+
+    private fun refresh() {
+        val (questionRes, answers) = getQuestionProps()
         binding.questionDescription.text = context?.getString(questionRes)
-        binding.answer1.text = context?.getString(answer1Res)
-        binding.answer2.text = context?.getString(answer2Res)
+        val buttons = listOf(binding.answer1, binding.answer2)
+        buttons.forEachIndexed { index, button ->
+            bindButton(button, answers[index])
+        }
+    }
+
+    private fun bindButton(button: Button, answer: QuestionProps.Answer) {
+        button.text = context?.getString(answer.answerRes)
+        button.setOnClickListener {
+            onAnswerSubmitted(answer.isCorrect)
+        }
+    }
+
+    // Now let's make the on answer callback more general
+    private fun onAnswerSubmitted(isCorrect: Boolean) {
+        val toastTextRes = when {
+            isCorrect -> R.string.correct_answer
+            else -> R.string.incorrect_answer
+        }
+        showToast(toastTextRes)
+        refresh()
     }
 
     private fun getQuestionProps(): QuestionProps {
         val questionNumber = Random.nextInt(1, 5)
 
-        val questionFormat = QUESTION_FORMAT
-        val answerCorrectFormat = ANSWER_CORRECT_FORMAT
-        val answerIncorrectFormat = ANSWER_INCORRECT_FORMAT
-        return QuestionProps(
-            questionRes = resources.getIdentifier(
-                questionFormat.format(questionNumber),
-                "string",
-                activity?.packageName
-            ),
-            answer1Res = resources.getIdentifier(
-                answerCorrectFormat.format(questionNumber),
-                "string",
-                activity?.packageName
-            ),
-            answer2Res = resources.getIdentifier(
-                answerIncorrectFormat.format(questionNumber, 1),
-                "string",
-                activity?.packageName
-            )
+        val correctAnswer = QuestionProps.Answer(
+            answerRes = getStringByName(ANSWER_CORRECT_FORMAT.format(questionNumber)),
+            isCorrect = true
         )
+
+        val incorrectAnswer = QuestionProps.Answer(
+            answerRes = getStringByName(ANSWER_INCORRECT_FORMAT.format(questionNumber, 1)),
+            isCorrect = false
+        )
+
+        val questionRes = getStringByName(QUESTION_FORMAT.format(questionNumber))
+        val answers = listOf(correctAnswer, incorrectAnswer).shuffled()
+
+        return QuestionProps(questionRes, answers)
     }
 
     override fun onDestroyView() {
@@ -68,10 +86,8 @@ class QuestionFragment : Fragment() {
         _binding = null
     }
 
-    private data class QuestionProps(
-        @StringRes val questionRes: Int,
-        @StringRes val answer1Res: Int,
-        @StringRes val answer2Res: Int
-    )
+    private data class QuestionProps(@StringRes val questionRes: Int, val answers: List<Answer>) {
+        data class Answer(@StringRes val answerRes: Int, val isCorrect: Boolean)
+    }
 
 }
