@@ -87,5 +87,48 @@ class QuestionFragment : BaseFragment() {
 
 }
 
+class AnswerAdapter : RecyclerView.Adapter<AnswerViewHolder>() {
+
+    var answers: List<String> = listOf()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnswerViewHolder {
+        val binding = ViewholderAnswerBinding.inflate(LayoutInflater.from(parent.context))
+        return AnswerViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: AnswerViewHolder, position: Int) {
+        val answerText = answers[position]
+        holder.bind(answerText)
+    }
+
+    override fun getItemCount(): Int = answers.count()
+}
+
+class ViewholderAnswerBinding {
+
+    lateinit var  root: View
+    lateinit var answerText: Any
+}
+
+class AnswerViewHolder(private val binding: ViewholderAnswerBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(answerText: String) {
+        binding.answerText.text = answerText
+    }
+}
+
+
+class SimpleFragment : Fragment() {
+    val adapter = AnswerAdapter()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val recyclerView: RecyclerView = TODO()
+
+        adapter.answers = listOf()
+        recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        recyclerView.adapter = adapter
+        adapter.notifyDataSetChanged()
+    }
+}
+
 
 
