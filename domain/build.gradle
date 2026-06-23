@@ -18,7 +18,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
     implementation 'javax.inject:javax.inject:1'
     
-    // Use hilt-core for pure Kotlin modules
-    implementation 'com.google.dagger:hilt-core:2.48'
-    ksp 'com.google.dagger:hilt-compiler:2.48'
+    // Hilt/Dagger
+    implementation 'com.google.dagger:hilt-core:2.50'
+    ksp 'com.google.dagger:hilt-compiler:2.50'
 }
