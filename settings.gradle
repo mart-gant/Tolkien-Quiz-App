@@ -14,3 +14,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Tolkien Quiz App"
 include ':presentation'
+include ':data'
+include ':domain'
