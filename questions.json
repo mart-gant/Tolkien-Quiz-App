@@ -1,0 +1,62 @@
+[
+  {
+    "text": "How many Rings of Power were forged for the Elven-kings?",
+    "options": ["One", "Three", "Seven", "Nine"],
+    "correctAnswerIndex": 1,
+    "category": "Lore"
+  },
+  {
+    "text": "What is the translation of 'Mellon' from Sindarin?",
+    "options": ["Friend", "King", "Gate", "Star"],
+    "correctAnswerIndex": 0,
+    "category": "Language"
+  },
+  {
+    "text": "Who was the first king of the Reunited Kingdom of Gondor and Arnor?",
+    "options": ["Isildur", "Elendil", "Elessar", "Denethor"],
+    "correctAnswerIndex": 2,
+    "category": "History"
+  },
+  {
+    "text": "What was the name of the bridge in Khazad-dûm where Gandalf fought the Balrog?",
+    "options": ["Durin's Bridge", "The Bridge of Khazad-dûm", "Stonebridge", "Moria Pass"],
+    "correctAnswerIndex": 1,
+    "category": "Geography"
+  },
+  {
+    "text": "Which Hobbit was known for his 'red book'?",
+    "options": ["Frodo Baggins", "Bilbo Baggins", "Samwise Gamgee", "Peregrin Took"],
+    "correctAnswerIndex": 1,
+    "category": "Characters"
+  },
+  {
+    "text": "What is the name of the tower where Saruman lived?",
+    "options": ["Barad-dûr", "Minas Morgul", "Orthanc", "Cirith Ungol"],
+    "correctAnswerIndex": 2,
+    "category": "Geography"
+  },
+  {
+    "text": "Who is the wife of Tom Bombadil?",
+    "options": ["Galadriel", "Arwen", "Goldberry", "Lúthien"],
+    "correctAnswerIndex": 2,
+    "category": "Characters"
+  },
+  {
+    "text": "What was the original name of Gollum?",
+    "options": ["Sméagol", "Déagol", "Bandobras", "Tobold"],
+    "correctAnswerIndex": 0,
+    "category": "Characters"
+  },
+  {
+    "text": "Which creature is a 'Shelob'?",
+    "options": ["Dragon", "Giant Spider", "Orc", "Troll"],
+    "correctAnswerIndex": 1,
+    "category": "Creatures"
+  },
+  {
+    "text": "What is the name of the white tree of Gondor?",
+    "options": ["Nimloth", "Telperion", "Laurelin", "Mallorn"],
+    "correctAnswerIndex": 0,
+    "category": "Lore"
+  }
+]

@@ -8,7 +8,8 @@ fun QuestionEntity.toDomain(): Question {
         id = id,
         text = text,
         options = options.split("|"),
-        correctAnswerIndex = correctAnswerIndex
+        correctAnswerIndex = correctAnswerIndex,
+        category = category
     )
 }
 
@@ -16,6 +17,7 @@ fun Question.toEntity(): QuestionEntity {
     return QuestionEntity(
         text = text,
         options = options.joinToString("|"),
-        correctAnswerIndex = correctAnswerIndex
+        correctAnswerIndex = correctAnswerIndex,
+        category = category
     )
 }
