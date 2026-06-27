@@ -12,6 +12,8 @@
     <string name="quiz_finished">Quiz Zakończony!</string>
     <string name="your_score">Twój wynik: %1$d / %2$d</string>
     <string name="back_to_menu">Powrót do Menu</string>
+    <string name="legal_disclaimer">To jest nieoficjalna aplikacja fanowska. Wszystkie nazwy, postacie i powiązane indeksy są znakami towarowymi ich odpowiednich właścicieli. Aplikacja nie jest powiązana z Tolkien Estate ani Middle-earth Enterprises.</string>
+    <string name="about">O aplikacji</string>
 
     <string name="feedback_perfect">Prawdziwy Powiernik Pierścienia!</string>
     <string name="feedback_good">Prawdziwy uczony z Gondoru.</string>

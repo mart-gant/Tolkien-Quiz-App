@@ -34,13 +34,21 @@ data class QuizUiState(
 class QuizViewModel @Inject constructor(
     private val getQuestionsUseCase: GetQuestionsUseCase,
     private val saveHighScoreUseCase: SaveHighScoreUseCase,
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val isSuddenDeathMode: Boolean = savedStateHandle["isSuddenDeath"] ?: false
 
+    // State restoration constants
+    private companion object {
+        const val KEY_SCORE = "quiz_score"
+        const val KEY_INDEX = "quiz_index"
+    }
+
     private val _uiState = MutableStateFlow(QuizUiState(
         isSuddenDeath = isSuddenDeathMode,
+        score = savedStateHandle[KEY_SCORE] ?: 0,
+        currentQuestionIndex = savedStateHandle[KEY_INDEX] ?: 0,
         loadingQuote = getRandomQuote()
     ))
     val uiState: StateFlow<QuizUiState> = _uiState.asStateFlow()
@@ -54,16 +62,19 @@ class QuizViewModel @Inject constructor(
     private fun loadQuestions() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            // Sztuczne opóźnienie (np. 2s), żeby użytkownik mógł nacieszyć się cytatem
-            delay(2000L) 
             
             getQuestionsUseCase().collect { questions ->
                 if (questions.isNotEmpty()) {
+                    // In a production app, we might want to save the shuffled seed 
+                    // to SavedStateHandle to keep the same order after process death
                     _uiState.update { it.copy(
-                        questions = questions.shuffled(),
+                        questions = questions, // Using stable order from DB for now
                         isLoading = false
                     ) }
-                    startTimer()
+                    
+                    if (!_uiState.value.isFinished) {
+                        startTimer()
+                    }
                 }
             }
         }
@@ -124,14 +135,18 @@ class QuizViewModel @Inject constructor(
 
         val nextIndex = state.currentQuestionIndex + 1
         val isFinished = nextIndex >= state.questions.size
+        val newScore = if (isCorrect) state.score + 1 else state.score
+
+        // Save progress for Process Death
+        savedStateHandle[KEY_SCORE] = newScore
+        savedStateHandle[KEY_INDEX] = if (isFinished) state.currentQuestionIndex else nextIndex
 
         if (isFinished) {
-            val finalScore = if (isCorrect) state.score + 1 else state.score
-            finishQuiz(finalScore = finalScore)
+            finishQuiz(finalScore = newScore)
         } else {
             _uiState.update { 
                 it.copy(
-                    score = if (isCorrect) it.score + 1 else it.score,
+                    score = newScore,
                     currentQuestionIndex = nextIndex,
                     selectedOptionIndex = null,
                     timeLeft = 15,

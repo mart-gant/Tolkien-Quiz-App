@@ -12,6 +12,8 @@
     <string name="quiz_finished">Quiz Finished!</string>
     <string name="your_score">Your score: %1$d / %2$d</string>
     <string name="back_to_menu">Back to Menu</string>
+    <string name="legal_disclaimer">This is an unofficial fan-made application. All names, characters, and related indices are trademarks of their respective owners. This app is not affiliated with the Tolkien Estate or Middle-earth Enterprises.</string>
+    <string name="about">About</string>
 
     <string name="feedback_perfect">Absolute Ring-bearer!</string>
     <string name="feedback_good">A true scholar of Gondor.</string>

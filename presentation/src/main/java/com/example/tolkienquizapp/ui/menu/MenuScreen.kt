@@ -19,6 +19,7 @@ fun MenuScreen(
 ) {
     val highScore by viewModel.highScore.collectAsState()
     var isSuddenDeath by remember { mutableStateOf(false) }
+    var showAboutDialog by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -78,5 +79,24 @@ fun MenuScreen(
         ) {
             Text(stringResource(R.string.start_quiz))
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        TextButton(onClick = { showAboutDialog = true }) {
+            Text(stringResource(R.string.about))
+        }
+    }
+
+    if (showAboutDialog) {
+        AlertDialog(
+            onDismissRequest = { showAboutDialog = false },
+            title = { Text(stringResource(R.string.about)) },
+            text = { Text(stringResource(R.string.legal_disclaimer)) },
+            confirmButton = {
+                TextButton(onClick = { showAboutDialog = false }) {
+                    Text("OK")
+                }
+            }
+        )
     }
 }

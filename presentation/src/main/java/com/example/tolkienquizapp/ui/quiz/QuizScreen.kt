@@ -12,8 +12,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tolkienquizapp.R
+import com.example.tolkienquizapp.ui.theme.TolkienQuizTheme
 
 @Composable
 fun QuizScreen(
@@ -324,5 +326,26 @@ fun QuizResult(score: Int, total: Int, wasSuddenDeathFailed: Boolean, onBackToMe
         ) {
             Text(stringResource(R.string.back_to_menu))
         }
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun QuizContentPreview() {
+    TolkienQuizTheme {
+        QuizContent(
+            questionText = "Who is the author of The Lord of the Rings?",
+            category = "General",
+            options = listOf("J.K. Rowling", "J.R.R. Tolkien", "C.S. Lewis", "George R.R. Martin"),
+            selectedOptionIndex = 1,
+            onOptionSelected = {},
+            onNextClicked = {},
+            questionNumber = 1,
+            totalQuestions = 10,
+            timeLeft = 12,
+            isTimeUp = false,
+            isSuddenDeath = false
+        )
     }
 }
