@@ -27,7 +27,7 @@ data class QuizUiState(
     val isSuddenDeath: Boolean = false,
     val wasSuddenDeathFailed: Boolean = false,
     val isLoading: Boolean = true,
-    val loadingQuote: String = ""
+    val loadingQuote: String = "",
 )
 
 @HiltViewModel
@@ -45,12 +45,14 @@ class QuizViewModel @Inject constructor(
         const val KEY_INDEX = "quiz_index"
     }
 
-    private val _uiState = MutableStateFlow(QuizUiState(
-        isSuddenDeath = isSuddenDeathMode,
-        score = savedStateHandle[KEY_SCORE] ?: 0,
-        currentQuestionIndex = savedStateHandle[KEY_INDEX] ?: 0,
-        loadingQuote = getRandomQuote()
-    ))
+    private val _uiState = MutableStateFlow(
+        QuizUiState(
+            isSuddenDeath = isSuddenDeathMode,
+            score = savedStateHandle[KEY_SCORE] ?: 0,
+            currentQuestionIndex = savedStateHandle[KEY_INDEX] ?: 0,
+            loadingQuote = getRandomQuote()
+        )
+    )
     val uiState: StateFlow<QuizUiState> = _uiState.asStateFlow()
 
     private var timerJob: Job? = null

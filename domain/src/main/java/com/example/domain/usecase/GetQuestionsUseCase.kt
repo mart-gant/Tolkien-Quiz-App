@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetQuestionsUseCase @Inject constructor(
-    private val repository: QuizRepository
+    private val repository: QuizRepository,
 ) {
     operator fun invoke(): Flow<List<Question>> = repository.getQuestions()
 }

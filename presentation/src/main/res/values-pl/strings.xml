@@ -18,6 +18,6 @@
     <string name="feedback_perfect">Prawdziwy Powiernik Pierścienia!</string>
     <string name="feedback_good">Prawdziwy uczony z Gondoru.</string>
     <string name="feedback_average">Nie każdy, kto błądzi, jest zagubiony.</string>
-    <string name="feedback_poor">Z głupia frant!</string>
+    <string name="feedback_poor">Tuk-tuman!</string>
     <string name="sudden_death_over">Nagła Śmierć! Jeden błąd wystarczył.</string>
 </resources>

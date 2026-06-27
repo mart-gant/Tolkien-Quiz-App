@@ -20,7 +20,7 @@ import com.example.tolkienquizapp.ui.theme.TolkienQuizTheme
 @Composable
 fun QuizScreen(
     onNavigateBack: () -> Unit,
-    viewModel: QuizViewModel = hiltViewModel()
+    viewModel: QuizViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -186,7 +186,7 @@ fun QuizContent(
         
         Button(
             onClick = onNextClicked,
-            enabled = selectedOptionIndex != null || isTimeUp,
+            enabled = (selectedOptionIndex != null) || isTimeUp,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(

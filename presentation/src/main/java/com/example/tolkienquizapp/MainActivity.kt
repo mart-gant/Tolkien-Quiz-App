@@ -35,7 +35,7 @@ fun TolkienQuizApp() {
     
     NavHost(
         navController = navController,
-        startDestination = Screen.Menu.route
+        startDestination = Screen.Menu.route,
     ) {
         composable(Screen.Menu.route) {
             MenuScreen(

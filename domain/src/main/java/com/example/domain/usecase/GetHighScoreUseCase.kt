@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetHighScoreUseCase @Inject constructor(
-    private val repository: QuizRepository
+    private val repository: QuizRepository,
 ) {
     operator fun invoke(): Flow<Int> = repository.getHighScore()
 }

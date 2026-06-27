@@ -16,20 +16,20 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 @Singleton
 class UserPreferences @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context,
 ) {
-    private val HIGH_SCORE_KEY = intPreferencesKey("high_score")
+    private val highScoreKey = intPreferencesKey("high_score")
 
     val highScore: Flow<Int> = context.dataStore.data
         .map { preferences ->
-            preferences[HIGH_SCORE_KEY] ?: 0
+            preferences[highScoreKey] ?: 0
         }
 
     suspend fun saveHighScore(score: Int) {
         context.dataStore.edit { preferences ->
-            val currentHighScore = preferences[HIGH_SCORE_KEY] ?: 0
+            val currentHighScore = preferences[highScoreKey] ?: 0
             if (score > currentHighScore) {
-                preferences[HIGH_SCORE_KEY] = score
+                preferences[highScoreKey] = score
             }
         }
     }

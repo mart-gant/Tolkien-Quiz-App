@@ -15,7 +15,7 @@ import javax.inject.Inject
 class QuizRepositoryImpl @Inject constructor(
     private val questionDao: QuestionDao,
     private val userPreferences: UserPreferences,
-    private val quizApi: QuizApi
+    private val quizApi: QuizApi,
 ) : QuizRepository {
 
     override fun getQuestions(): Flow<List<Question>> = flow {
@@ -41,9 +41,11 @@ class QuizRepositoryImpl @Inject constructor(
         }
 
         // 3. Emituj ostateczny stan bazy (lokalne + pobrane)
-        emitAll(questionDao.getQuestions().map { entities ->
-            entities.map { it.toDomain() }
-        })
+        emitAll(
+            questionDao.getQuestions().map { entities ->
+                entities.map { it.toDomain() }
+            }
+        )
     }.distinctUntilChanged()
 
     override fun getHighScore(): Flow<Int> = userPreferences.highScore

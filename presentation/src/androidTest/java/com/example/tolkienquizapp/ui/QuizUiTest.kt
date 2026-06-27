@@ -34,7 +34,7 @@ class QuizUiTest {
                     totalQuestions = 10,
                     timeLeft = 15,
                     isTimeUp = false,
-                    isSuddenDeath = false
+                    isSuddenDeath = false,
                 )
             }
         }
@@ -64,7 +64,7 @@ class QuizUiTest {
                     totalQuestions = 10,
                     timeLeft = 15,
                     isTimeUp = false,
-                    isSuddenDeath = false
+                    isSuddenDeath = false,
                 )
             }
         }

@@ -1,7 +1,6 @@
 package com.example.tolkienquizapp.ui.quiz
 
 import androidx.lifecycle.SavedStateHandle
-import app.cash.turbine.test
 import com.example.domain.model.Question
 import com.example.domain.usecase.GetQuestionsUseCase
 import com.example.domain.usecase.SaveHighScoreUseCase
@@ -37,7 +36,7 @@ class QuizViewModelTest {
         
         val questions = listOf(
             Question(1, "Q1", listOf("A", "B"), 0, "Cat1"),
-            Question(2, "Q2", listOf("C", "D"), 1, "Cat2")
+            Question(2, "Q2", listOf("C", "D"), 1, "Cat2"),
         )
         coEvery { getQuestionsUseCase() } returns flowOf(questions)
     }
