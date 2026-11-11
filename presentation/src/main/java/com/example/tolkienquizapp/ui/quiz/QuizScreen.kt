@@ -70,6 +70,7 @@ fun LoadingScreen(quote: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .systemBarsPadding()
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -112,6 +113,7 @@ fun QuizContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .systemBarsPadding()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -187,7 +189,9 @@ fun QuizContent(
         Button(
             onClick = onNextClicked,
             enabled = (selectedOptionIndex != null) || isTimeUp,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
         ) {
             Text(
                 if (questionNumber == totalQuestions) stringResource(R.string.finish) 
@@ -266,7 +270,10 @@ fun OptionsList(
 @Composable
 fun QuizResult(score: Int, total: Int, wasSuddenDeathFailed: Boolean, onBackToMenu: () -> Unit) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

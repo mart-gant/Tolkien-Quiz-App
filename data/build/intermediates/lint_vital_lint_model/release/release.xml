@@ -26,6 +26,6 @@
       applicationId="com.example.data"
       generatedSourceFolders="build/generated/ksp/release/java:build/generated/ksp/release/kotlin:build/generated/ap_generated_sources/release/out"
       generatedResourceFolders="build/generated/res/resValues/release"
-      desugaredMethodsFiles="/Users/marcingantkowski/.gradle/caches/transforms-3/35850eb2c0768419eb675501ac9ccc6f/transformed/D8BackportedDesugaredMethods.txt">
+      desugaredMethodsFiles="/Users/marcingantkowski/.gradle/caches/8.12/transforms/5047c43cc47bb8e361203a9ddc8b50b9/transformed/D8BackportedDesugaredMethods.txt">
   </artifact>
 </variant>
