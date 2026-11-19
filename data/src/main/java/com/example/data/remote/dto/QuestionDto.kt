@@ -8,6 +8,7 @@ data class QuestionDto(
     @param:Json(name = "options") val options: List<String>,
     @param:Json(name = "correctAnswerIndex") val correctAnswerIndex: Int,
     @param:Json(name = "category") val category: String,
+    @param:Json(name = "loreNote") val loreNote: String? = null,
 )
 
 fun QuestionDto.toEntity(): QuestionEntity {
@@ -15,6 +16,7 @@ fun QuestionDto.toEntity(): QuestionEntity {
         text = text,
         options = options.joinToString("|"),
         correctAnswerIndex = correctAnswerIndex,
-        category = category
+        category = category,
+        loreNote = loreNote ?: ""
     )
 }

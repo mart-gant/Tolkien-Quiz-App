@@ -41,8 +41,8 @@ fun TolkienQuizApp() {
     ) {
         composable(Screen.Menu.route) {
             MenuScreen(
-                onStartQuiz = { isSuddenDeath -> 
-                    navController.navigate(Screen.Quiz.createRoute(isSuddenDeath)) 
+                onStartQuiz = { isSuddenDeath, timerSeconds -> 
+                    navController.navigate(Screen.Quiz.createRoute(isSuddenDeath, timerSeconds)) 
                 }
             )
         }
@@ -52,6 +52,10 @@ fun TolkienQuizApp() {
                 navArgument("isSuddenDeath") {
                     type = NavType.BoolType
                     defaultValue = false
+                },
+                navArgument("timerSeconds") {
+                    type = NavType.IntType
+                    defaultValue = 15
                 }
             )
         ) {

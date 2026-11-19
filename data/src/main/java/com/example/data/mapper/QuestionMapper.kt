@@ -10,6 +10,7 @@ fun QuestionEntity.toDomain(): Question {
         options = options.split("|"),
         correctAnswerIndex = correctAnswerIndex,
         category = category,
+        loreNote = loreNote
     )
 }
 
@@ -19,5 +20,6 @@ fun Question.toEntity(): QuestionEntity {
         options = options.joinToString("|"),
         correctAnswerIndex = correctAnswerIndex,
         category = category,
+        loreNote = loreNote
     )
 }

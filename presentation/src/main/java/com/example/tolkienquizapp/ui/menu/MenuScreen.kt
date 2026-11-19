@@ -14,12 +14,19 @@ import com.example.tolkienquizapp.R
 
 @Composable
 fun MenuScreen(
-    onStartQuiz: (Boolean) -> Unit,
+    onStartQuiz: (isSuddenDeath: Boolean, timerSeconds: Int) -> Unit,
     viewModel: MenuViewModel = hiltViewModel()
 ) {
     val highScore by viewModel.highScore.collectAsState()
     var isSuddenDeath by remember { mutableStateOf(false) }
+    var selectedDifficulty by remember { mutableIntStateOf(1) } // 0: Shire (20s), 1: Gondor (15s), 2: Mordor (10s)
     var showAboutDialog by remember { mutableStateOf(false) }
+
+    val timerSeconds = when (selectedDifficulty) {
+        0 -> 20
+        2 -> 10
+        else -> 15
+    }
 
     Column(
         modifier = Modifier
@@ -58,7 +65,35 @@ fun MenuScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Text(
+            text = "Poziom trudności / Poziom krainy:",
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(bottom = 16.dp)
+        ) {
+            FilterChip(
+                selected = selectedDifficulty == 0,
+                onClick = { selectedDifficulty = 0 },
+                label = { Text("🌱 Shire (20s)") }
+            )
+            FilterChip(
+                selected = selectedDifficulty == 1,
+                onClick = { selectedDifficulty = 1 },
+                label = { Text("🏰 Gondor (15s)") }
+            )
+            FilterChip(
+                selected = selectedDifficulty == 2,
+                onClick = { selectedDifficulty = 2 },
+                label = { Text("🌋 Mordor (10s)") }
+            )
+        }
         
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -75,7 +110,7 @@ fun MenuScreen(
         }
 
         Button(
-            onClick = { onStartQuiz(isSuddenDeath) },
+            onClick = { onStartQuiz(isSuddenDeath, timerSeconds) },
             modifier = Modifier.fillMaxWidth(0.7f)
         ) {
             Text(stringResource(R.string.start_quiz))

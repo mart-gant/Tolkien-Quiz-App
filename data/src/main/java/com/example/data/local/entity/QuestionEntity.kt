@@ -14,5 +14,6 @@ data class QuestionEntity(
     val text: String,
     val options: String,
     val correctAnswerIndex: Int,
-    val category: String
+    val category: String,
+    val loreNote: String = "",
 )

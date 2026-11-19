@@ -22,6 +22,7 @@ data class QuizUiState(
     val score: Int = 0,
     val isFinished: Boolean = false,
     val selectedOptionIndex: Int? = null,
+    val showAnswerResult: Boolean = false,
     val timeLeft: Int = 15,
     val isTimeUp: Boolean = false,
     val isSuddenDeath: Boolean = false,
@@ -38,6 +39,7 @@ class QuizViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val isSuddenDeathMode: Boolean = savedStateHandle["isSuddenDeath"] ?: false
+    private val defaultTimerSeconds: Int = savedStateHandle["timerSeconds"] ?: 15
 
     // State restoration constants
     private companion object {
@@ -96,7 +98,7 @@ class QuizViewModel @Inject constructor(
 
     private fun startTimer() {
         timerJob?.cancel()
-        _uiState.update { it.copy(timeLeft = 15, isTimeUp = false) }
+        _uiState.update { it.copy(timeLeft = defaultTimerSeconds, isTimeUp = false) }
         timerJob = viewModelScope.launch {
             while (_uiState.value.timeLeft > 0) {
                 delay(1000L)
@@ -119,8 +121,26 @@ class QuizViewModel @Inject constructor(
     }
 
     fun onOptionSelected(index: Int) {
-        if (_uiState.value.isTimeUp || _uiState.value.isFinished || _uiState.value.isLoading) return
-        _uiState.update { it.copy(selectedOptionIndex = index) }
+        val state = _uiState.value
+        if (state.isTimeUp || state.isFinished || state.isLoading || state.showAnswerResult) return
+        
+        timerJob?.cancel()
+        val currentQuestion = state.questions.getOrNull(state.currentQuestionIndex) ?: return
+        val isCorrect = index == currentQuestion.correctAnswerIndex
+
+        _uiState.update { 
+            it.copy(
+                selectedOptionIndex = index,
+                showAnswerResult = true
+            ) 
+        }
+
+        if (isSuddenDeathMode && !isCorrect) {
+            viewModelScope.launch {
+                delay(1200L)
+                finishQuiz(failedSuddenDeath = true)
+            }
+        }
     }
 
     fun onNextClicked() {
@@ -128,9 +148,10 @@ class QuizViewModel @Inject constructor(
         val state = _uiState.value
         if (state.isFinished || state.isLoading) return
 
-        val isCorrect = state.selectedOptionIndex == state.questions[state.currentQuestionIndex].correctAnswerIndex
+        val currentQuestion = state.questions.getOrNull(state.currentQuestionIndex) ?: return
+        val isCorrect = state.selectedOptionIndex == currentQuestion.correctAnswerIndex
         
-        if (isSuddenDeathMode && !isCorrect) {
+        if (isSuddenDeathMode && !isCorrect && state.showAnswerResult) {
             finishQuiz(failedSuddenDeath = true)
             return
         }
@@ -151,7 +172,8 @@ class QuizViewModel @Inject constructor(
                     score = newScore,
                     currentQuestionIndex = nextIndex,
                     selectedOptionIndex = null,
-                    timeLeft = 15,
+                    showAnswerResult = false,
+                    timeLeft = defaultTimerSeconds,
                     isTimeUp = false
                 )
             }

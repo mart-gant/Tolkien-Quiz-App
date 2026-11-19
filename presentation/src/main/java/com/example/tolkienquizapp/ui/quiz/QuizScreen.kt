@@ -51,6 +51,9 @@ fun QuizScreen(
                         category = currentQuestion.category,
                         options = currentQuestion.options,
                         selectedOptionIndex = uiState.selectedOptionIndex,
+                        correctAnswerIndex = currentQuestion.correctAnswerIndex,
+                        showAnswerResult = uiState.showAnswerResult,
+                        loreNote = currentQuestion.loreNote,
                         onOptionSelected = viewModel::onOptionSelected,
                         onNextClicked = viewModel::onNextClicked,
                         questionNumber = uiState.currentQuestionIndex + 1,
@@ -102,6 +105,9 @@ fun QuizContent(
     category: String,
     options: List<String>,
     selectedOptionIndex: Int?,
+    correctAnswerIndex: Int,
+    showAnswerResult: Boolean,
+    loreNote: String = "",
     onOptionSelected: (Int) -> Unit,
     onNextClicked: () -> Unit,
     questionNumber: Int,
@@ -160,7 +166,7 @@ fun QuizContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         
         Text(
             text = questionText,
@@ -169,10 +175,45 @@ fun QuizContent(
             modifier = Modifier.weight(1f)
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         
         Column(modifier = Modifier.weight(2f)) {
-            OptionsList(options, selectedOptionIndex, onOptionSelected, enabled = !isTimeUp)
+            OptionsList(
+                options = options,
+                selectedOptionIndex = selectedOptionIndex,
+                correctAnswerIndex = correctAnswerIndex,
+                showAnswerResult = showAnswerResult,
+                onOptionSelected = onOptionSelected,
+                enabled = !isTimeUp && !showAnswerResult
+            )
+
+            AnimatedVisibility(
+                visible = showAnswerResult && loreNote.isNotEmpty(),
+                enter = fadeIn() + expandVertically()
+            ) {
+                Surface(
+                    color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.7f),
+                    shape = MaterialTheme.shapes.medium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text(
+                            text = "💡 Czy wiesz, że...?",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = loreNote,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                    }
+                }
+            }
         }
 
         if (isTimeUp) {
@@ -184,7 +225,7 @@ fun QuizContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         
         Button(
             onClick = onNextClicked,
@@ -224,11 +265,29 @@ fun TimerDisplay(timeLeft: Int) {
 fun OptionsList(
     options: List<String>,
     selectedOptionIndex: Int?,
+    correctAnswerIndex: Int,
+    showAnswerResult: Boolean,
     onOptionSelected: (Int) -> Unit,
     enabled: Boolean
 ) {
     options.forEachIndexed { index, option ->
         val isSelected = index == selectedOptionIndex
+        val isCorrect = index == correctAnswerIndex
+
+        val containerColor = when {
+            showAnswerResult && isCorrect -> Color(0xFF2E7D32).copy(alpha = 0.15f)
+            showAnswerResult && isSelected && !isCorrect -> MaterialTheme.colorScheme.errorContainer
+            isSelected -> MaterialTheme.colorScheme.primaryContainer
+            else -> Color.Transparent
+        }
+
+        val borderColor = when {
+            showAnswerResult && isCorrect -> Color(0xFF2E7D32)
+            showAnswerResult && isSelected && !isCorrect -> MaterialTheme.colorScheme.error
+            isSelected -> MaterialTheme.colorScheme.primary
+            else -> MaterialTheme.colorScheme.outline
+        }
+
         OutlinedCard(
             modifier = Modifier
                 .fillMaxWidth()
@@ -238,12 +297,10 @@ fun OptionsList(
                     enabled = enabled,
                     onClick = { onOptionSelected(index) }
                 ),
-            colors = CardDefaults.outlinedCardColors(
-                containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
-            ),
+            colors = CardDefaults.outlinedCardColors(containerColor = containerColor),
             border = androidx.compose.foundation.BorderStroke(
-                width = if (isSelected) 2.dp else 1.dp,
-                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                width = if (isSelected || (showAnswerResult && isCorrect)) 2.dp else 1.dp,
+                color = borderColor
             )
         ) {
             Row(
@@ -255,12 +312,17 @@ fun OptionsList(
                 RadioButton(
                     selected = isSelected,
                     onClick = null,
-                    enabled = enabled
+                    enabled = enabled,
+                    colors = RadioButtonDefaults.colors(
+                        selectedColor = if (showAnswerResult && !isCorrect) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                    )
                 )
                 Text(
                     text = option,
                     modifier = Modifier.padding(start = 12.dp),
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = if (showAnswerResult && isCorrect) FontWeight.Bold else FontWeight.Normal,
+                    color = if (showAnswerResult && isCorrect) Color(0xFF1B5E20) else MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -269,6 +331,15 @@ fun OptionsList(
 
 @Composable
 fun QuizResult(score: Int, total: Int, wasSuddenDeathFailed: Boolean, onBackToMenu: () -> Unit) {
+    val percentage = if (total > 0) (score.toFloat() / total * 100).toInt() else 0
+    val (rankTitle, rankEmoji) = when {
+        percentage == 100 -> "Prawdziwy Powiernik Pierścienia" to "💍"
+        percentage >= 75 -> "Uczony z Gondoru" to "📜"
+        percentage >= 50 -> "Strażnik z Północy" to "⚔️"
+        percentage >= 25 -> "Podróżnik z Bree" to "🍺"
+        else -> "Hobbit nieopuszczający Shire" to "🪵"
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -282,7 +353,27 @@ fun QuizResult(score: Int, total: Int, wasSuddenDeathFailed: Boolean, onBackToMe
             style = MaterialTheme.typography.displaySmall,
             color = if (wasSuddenDeathFailed) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Surface(
+            color = MaterialTheme.colorScheme.primaryContainer,
+            shape = MaterialTheme.shapes.medium,
+            modifier = Modifier.padding(bottom = 16.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                Text(text = rankEmoji, style = MaterialTheme.typography.titleLarge)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = rankTitle,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+        }
         
         if (wasSuddenDeathFailed) {
             Text(
@@ -296,21 +387,20 @@ fun QuizResult(score: Int, total: Int, wasSuddenDeathFailed: Boolean, onBackToMe
 
         CircularProgressIndicator(
             progress = { score.toFloat() / total },
-            modifier = Modifier.size(120.dp),
+            modifier = Modifier.size(110.dp),
             strokeWidth = 12.dp,
             color = if (wasSuddenDeathFailed) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
             trackColor = MaterialTheme.colorScheme.surfaceVariant,
             strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
         )
         
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         
         Text(
             text = stringResource(R.string.your_score, score, total),
             style = MaterialTheme.typography.headlineSmall
         )
         
-        val percentage = (score.toFloat() / total * 100).toInt()
         val feedback = when {
             percentage == 100 -> stringResource(R.string.feedback_perfect)
             percentage >= 70 -> stringResource(R.string.feedback_good)
@@ -325,7 +415,7 @@ fun QuizResult(score: Int, total: Int, wasSuddenDeathFailed: Boolean, onBackToMe
             fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
         )
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(36.dp))
         Button(
             onClick = onBackToMenu,
             modifier = Modifier.fillMaxWidth(0.6f),
@@ -346,6 +436,8 @@ fun QuizContentPreview() {
             category = "General",
             options = listOf("J.K. Rowling", "J.R.R. Tolkien", "C.S. Lewis", "George R.R. Martin"),
             selectedOptionIndex = 1,
+            correctAnswerIndex = 1,
+            showAnswerResult = true,
             onOptionSelected = {},
             onNextClicked = {},
             questionNumber = 1,

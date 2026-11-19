@@ -49,7 +49,7 @@ class QuizViewModelTest {
     @Test
     fun `initial state is correct`() = runTest {
         createViewModel()
-        testDispatcher.scheduler.advanceUntilIdle()
+        testDispatcher.scheduler.runCurrent()
         val state = viewModel.uiState.value
         assertEquals(2, state.questions.size)
         assertEquals(0, state.currentQuestionIndex)
@@ -59,11 +59,14 @@ class QuizViewModelTest {
     @Test
     fun `answering correctly increases score`() = runTest {
         createViewModel()
-        testDispatcher.scheduler.advanceUntilIdle()
+        testDispatcher.scheduler.runCurrent()
         
         val firstQuestion = viewModel.uiState.value.questions[0]
         viewModel.onOptionSelected(firstQuestion.correctAnswerIndex)
+        testDispatcher.scheduler.runCurrent()
+
         viewModel.onNextClicked()
+        testDispatcher.scheduler.runCurrent()
         
         assertEquals(1, viewModel.uiState.value.score)
         assertEquals(1, viewModel.uiState.value.currentQuestionIndex)
@@ -72,13 +75,14 @@ class QuizViewModelTest {
     @Test
     fun `sudden death mode ends game on wrong answer`() = runTest {
         createViewModel(isSuddenDeath = true)
-        testDispatcher.scheduler.advanceUntilIdle()
+        testDispatcher.scheduler.runCurrent()
         
         val firstQuestion = viewModel.uiState.value.questions[0]
         val wrongIndex = if (firstQuestion.correctAnswerIndex == 0) 1 else 0
         
         viewModel.onOptionSelected(wrongIndex)
-        viewModel.onNextClicked()
+        testDispatcher.scheduler.advanceTimeBy(1300L)
+        testDispatcher.scheduler.runCurrent()
         
         val state = viewModel.uiState.value
         assertEquals(true, state.isFinished)
@@ -89,17 +93,21 @@ class QuizViewModelTest {
     @Test
     fun `finishing quiz saves high score`() = runTest {
         createViewModel()
-        testDispatcher.scheduler.advanceUntilIdle()
+        testDispatcher.scheduler.runCurrent()
         
         // Answer Q1
         val q1 = viewModel.uiState.value.questions[0]
         viewModel.onOptionSelected(q1.correctAnswerIndex)
+        testDispatcher.scheduler.runCurrent()
         viewModel.onNextClicked()
+        testDispatcher.scheduler.runCurrent()
         
         // Answer Q2
         val q2 = viewModel.uiState.value.questions[1]
         viewModel.onOptionSelected(q2.correctAnswerIndex)
+        testDispatcher.scheduler.runCurrent()
         viewModel.onNextClicked()
+        testDispatcher.scheduler.runCurrent()
         
         assertEquals(2, viewModel.uiState.value.score)
         assertEquals(true, viewModel.uiState.value.isFinished)
