@@ -3,10 +3,13 @@ package com.example.tolkienquizapp.ui.menu
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,25 +42,30 @@ fun MenuScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Surface(
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             modifier = Modifier
-                .size(100.dp)
-                .padding(bottom = 16.dp),
-            shape = CircleShape,
-            color = MaterialTheme.colorScheme.primaryContainer,
-            shadowElevation = 6.dp
+                .fillMaxWidth()
+                .height(150.dp)
+                .padding(bottom = 16.dp)
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                    contentDescription = stringResource(R.string.app_name),
-                    modifier = Modifier.size(76.dp)
-                )
-            }
+            Image(
+                painter = painterResource(id = R.drawable.tolkien_quiz_banner),
+                contentDescription = stringResource(R.string.app_name),
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
         }
+
+        Image(
+            painter = painterResource(id = R.drawable.tolkien_quiz_logo),
+            contentDescription = stringResource(R.string.app_name),
+            modifier = Modifier
+                .size(80.dp)
+                .clip(CircleShape)
+                .padding(bottom = 8.dp)
+        )
 
         Text(
             text = stringResource(R.string.app_name),
